@@ -8,14 +8,17 @@ translate_daemon.py — 自守护批量翻译循环
 - 状态：/tmp/translate_daemon.status  日志：/tmp/translate_daemon.log
 """
 import os, sys, time, subprocess, signal
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent))
+from pipeline_config import CFG
 
 DAEMON_LOG = "/tmp/translate_daemon.log"
 STATUS_FILE = "/tmp/translate_daemon.status"
 ROUND_LOG = "/tmp/batch_daemon_round.log"  # batch 输出落地，消除盲区
-WORKDIR = "/Users/xbpd/WorkBuddy/每日早报"
-SCRIPT = os.path.join(WORKDIR, "scripts", "batch_translate.py")
-PAPER_ROOT = "/Users/xbpd/Documents/论文"
-SUBDIRS = ["01-智能体", "02-上下文工程", "03-提示词工程", "04-Harness执行框架", "05-循环工程", "06-AI医疗"]
+WORKDIR = str(Path(__file__).resolve().parent)  # 脚本所在目录（batch_translate.py 同目录）
+SCRIPT = os.path.join(WORKDIR, "batch_translate.py")
+PAPER_ROOT = CFG["paths"]["paper_root_legacy"]
+SUBDIRS = list(CFG["directions"])
 
 def log(msg):
     with open(DAEMON_LOG, "a", encoding="utf-8") as f:

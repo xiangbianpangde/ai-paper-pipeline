@@ -6,14 +6,16 @@
 """
 import os, re, sys, time, json, urllib.request, subprocess
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent))
+from pipeline_config import CFG
 
-ROOT = Path("/Users/xbpd/Documents/xbpd_obsidian/02. 🟡 归类 Arrange/论文")
-DIRS = ["01-智能体","02-上下文工程","03-提示词工程","04-Harness执行框架","05-循环工程","06-AI医疗"]
+ROOT = Path(CFG["paths"]["paper_root"])
+DIRS = list(CFG["directions"])
 LOG = "/tmp/guide_gen.log"
 STATUS = "/tmp/guide_gen.status"
-ENV = Path("/Users/xbpd/Projects/pdf2zh/.env")
-SECRETS = Path("/Users/xbpd/WorkBuddy/每日早报/.secrets/minimax.json")
-MODEL, BASE = "MiniMax-M3", "https://api.minimaxi.com/v1"
+ENV = Path(CFG["paths"]["pdf2zh"]) / ".env"
+SECRETS = Path(CFG["paths"]["secrets_dir"]) / "minimax.json"
+MODEL, BASE = CFG["translate"]["model"], CFG["translate"]["base_url"]
 
 def log(*a):
     msg = " ".join(str(x) for x in a)
@@ -119,7 +121,7 @@ arXiv 编号（可能为空）：{arx or '未知'}
 
 
 # 「本地 PDF」是**确定性事实**，不应交给 LLM 复写：实测长路径（含 emoji 🟡）会被丢字/串字，
-# 产出 /Users/xbpd/Documents/xbobsidian/... 、xbiodian/... 、emoji 被吞成双空格等坏路径。
+# 产出目录名损坏（如标题带斜杠/emoji 被吞成双空格等坏路径）的检测与清理记录。
 # 故：prompt 只输出占位符，生成后在此统一重写为「相对库根」路径（同库内 MemoryART 先例，可随库迁移）。
 _PDF_ROW = re.compile(r"^(\|\s*\**\s*本地\s*PDF\s*\**\s*\|)(.*?)(\|\s*)$", re.M)
 _PDF_BUL = re.compile(r"^((?:[-*]\s*)?\**\s*本地\s*PDF\s*\**\s*[:：])(.*)$", re.M)

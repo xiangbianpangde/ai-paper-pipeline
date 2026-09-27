@@ -6,7 +6,8 @@
 set -u
 LOCKFILE="/tmp/batch_translate_daemon.lock"
 LOG="/tmp/batch_translate_daemon.log"
-WORKDIR="/Users/xbpd/WorkBuddy/每日早报"
+# WORKDIR 取脚本所在目录（batch_translate.py 同目录），可用环境变量覆盖
+WORKDIR="${PIPELINE_WORKDIR:-$(cd "$(dirname "$0")" && pwd)}"
 PARALLEL="${1:-2}"
 
 # 锁文件防止并发（带 PID 校验的简单锁）

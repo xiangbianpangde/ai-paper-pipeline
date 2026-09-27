@@ -3,13 +3,15 @@
 产出 /tmp/migration_preview.md：逐篇论文的目标操作（建夹/移动/改名/入待转换池）与歧义标记
 绝不执行任何写操作。
 """
-import os, re, unicodedata
+import os, re, unicodedata, sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent))
+from pipeline_config import CFG
 
-ROOT = Path("/Users/xbpd/Documents/论文")
-DIRS = ["01-智能体","02-上下文工程","03-提示词工程","04-Harness执行框架","05-循环工程","06-AI医疗"]
+ROOT = Path(CFG["paths"]["paper_root_legacy"])
+DIRS = list(CFG["directions"])
 SKIP = {".DS_Store"}
-PENDING = "00-待OCR转换"   # 统一目录（候选名，稍后确认）
+PENDING = CFG["special_dirs"]["pending_ocr"]   # 统一目录
 
 def has_cjk(s): return any('\u4e00' <= c <= '\u9fff' for c in s)
 

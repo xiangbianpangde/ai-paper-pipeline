@@ -1,0 +1,66 @@
+{
+  "user": {
+    "name": "测试用户"
+  },
+  "research_interests": "Agent 与四大工程（context / prompt / harness / loop）、AI 医疗",
+  "research_anchors": "medbrain、RAG/Graph/Harness/Loop 四件套、devguard",
+  "paths": {
+    "paper_root": "/Users/xbpd/Documents/xbpd_obsidian/02. 🟡 归类 Arrange/论文",
+    "paper_root_legacy": "/Users/xbpd/Documents/论文",
+    "workspace": "/Users/xbpd/WorkBuddy/每日早报",
+    "pdf2zh": "/Users/xbpd/Projects/pdf2zh",
+    "secrets_dir": "/Users/xbpd/WorkBuddy/每日早报/.secrets",
+    "python_hint": "/Users/xbpd/.workbuddy/binaries/python/envs/default/bin/python",
+    "quark_cli": "/Users/xbpd/.workbuddy/skills/quarkclouddrive/scripts/quark-drive.cjs",
+    "quark_skill_dir": "/Users/xbpd/.workbuddy/skills/quarkclouddrive"
+  },
+  "directions": [
+    "01-智能体",
+    "02-上下文工程",
+    "03-提示词工程",
+    "04-Harness执行框架",
+    "05-循环工程",
+    "06-AI医疗"
+  ],
+  "extra_directions": [
+    "07-教育AI与知识图谱",
+    "08-通用AI与深度学习"
+  ],
+  "direction_map": {
+    "agent": "01-智能体",
+    "context": "02-上下文工程",
+    "prompt": "03-提示词工程",
+    "harness": "04-Harness执行框架",
+    "loop": "05-循环工程",
+    "medical": "06-AI医疗"
+  },
+  "special_dirs": {
+    "pending_ocr": "00-待OCR转换",
+    "classify_99": "99-待分类(非方向)",
+    "skip": [
+      "00-待OCR转换",
+      "99-资料区(非论文·待定)"
+    ]
+  },
+  "translate": {
+    "model": "MiniMax-M3",
+    "base_url": "https://api.minimaxi.com/v1",
+    "max_chunk": 5500,
+    "workers": 4
+  },
+  "quark": {
+    "fid_report": "3d60cf75257744ffa1551c85e47da36f",
+    "fid_directions": {
+      "01-智能体": "05ab1fceb0ca498299b8aa3a9130d39a",
+      "02-上下文工程": "ab6089fa815a436aab6973e7ccbc29c5",
+      "03-提示词工程": "98df445d848f41b1871277c28840f2da",
+      "04-Harness执行框架": "57b77d4b09854d1d942edc16bc26ba1c",
+      "05-循环工程": "63f2f6b86c3c4ba38560ed8bd22d16db",
+      "06-AI医疗": "4bcae7854bb243ddbf945e417d0965d2"
+    }
+  },
+  "notify": {
+    "serverchan_env": "SERVERCHAN_SEND_KEY",
+    "serverchan_key_file": "serverchan_key"
+  }
+}

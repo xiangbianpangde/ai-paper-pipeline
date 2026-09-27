@@ -19,12 +19,13 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).parent
-ROOT = Path("/Users/xbpd/Documents/xbpd_obsidian/02. 🟡 归类 Arrange/论文")
-DIRS = ["01-智能体", "02-上下文工程", "03-提示词工程",
-        "04-Harness执行框架", "05-循环工程", "06-AI医疗",
-        "07-教育AI与知识图谱", "08-通用AI与深度学习"]
+sys.path.insert(0, str(HERE))
+from pipeline_config import CFG
+
+ROOT = Path(CFG["paths"]["paper_root"])
+DIRS = list(CFG["directions"]) + list(CFG.get("extra_directions", []))
 CACHE = HERE.parent / ".cache" / "paper_hash_index.json"
-SKIP_DIRS = {"00-待OCR转换", "99-资料区(非论文·待定)"}
+SKIP_DIRS = set(CFG["special_dirs"]["skip"])
 
 ARXIV_RE = re.compile(rb"arXiv:\s*(\d{4}\.\d{4,5})")
 ARXIV_FN_RE = re.compile(r"(\d{4}\.\d{4,5})")

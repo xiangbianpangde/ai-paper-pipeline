@@ -23,8 +23,11 @@ import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
-WORKSPACE = Path("/Users/xbpd/WorkBuddy/每日早报")
-PAPER_ROOT = Path("/Users/xbpd/Documents/xbpd_obsidian/02. 🟡 归类 Arrange/论文")
+sys.path.insert(0, str(Path(__file__).parent))
+from pipeline_config import CFG
+
+WORKSPACE = Path(CFG["paths"]["workspace"])
+PAPER_ROOT = Path(CFG["paths"]["paper_root"])
 
 DIRECTIONS = ["01-智能体", "02-上下文工程", "03-提示词工程",
               "04-Harness执行框架", "05-循环工程", "06-AI医疗"]

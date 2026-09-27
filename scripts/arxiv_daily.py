@@ -6,27 +6,21 @@ arxiv_daily.py — 每日 arXiv 六方向检索 + PDF 下载工具链
   python3 arxiv_daily.py fetch            # 按配置检索六方向，输出 JSON 到 out/
   python3 arxiv_daily.py download <id>... # 批量下载 PDF（带文件头校验 + 重试）
   python3 arxiv_daily.py all              # fetch + 自动下载 top N 篇
-论文归档：/Users/xbpd/Documents/论文/<方向中文子目录>/<id>.pdf
+论文归档：<PAPER_ROOT>/<方向中文子目录>/<id>.pdf（PAPER_ROOT 见 config.json）
 依赖：python3 标准库（urllib/re/json），无需第三方包
 """
 import sys, os, re, json, time, html as htmlmod, subprocess
 import urllib.request, urllib.parse
+from pipeline_config import CFG
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(BASE)
 OUT_DIR = os.path.join(ROOT, "out")
-# 论文统一归档（2026-09-04 起 Obsidian 论文库）
-PAPER_ROOT = "/Users/xbpd/Documents/xbpd_obsidian/02. 🟡 归类 Arrange/论文"
+# 论文统一归档（路径见 config.json paths.paper_root）
+PAPER_ROOT = CFG["paths"]["paper_root"]
 
 # 方向 -> 中文子目录（directory-discipline：按职责内聚分组）
-DIRECTION_DIRS = {
-    "agent":   "01-智能体",
-    "context": "02-上下文工程",
-    "prompt":  "03-提示词工程",
-    "harness": "04-Harness执行框架",
-    "loop":    "05-循环工程",
-    "medical": "06-AI医疗",
-}
+DIRECTION_DIRS = dict(CFG["direction_map"])
 
 # 六大方向检索配置（简化查询：不带日期范围，靠 sortBy=submittedDate 倒序取最新，更稳）
 QUERIES = {

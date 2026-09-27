@@ -7,19 +7,21 @@ batch_translate.py — 批量翻译论文 PDF 为中文 Markdown（pdf2zh + Mini
   python3 batch_translate.py --dir 06-AI医疗 # 只翻译指定子目录
   python3 batch_translate.py --skip-existing # 跳过已有输出的（默认即跳过）
 流程：每篇 PDF → mineru 解析 → MiniMax-M3 分块翻译 → <name>_zh.md
-输出：/Users/xbpd/Documents/论文/<子目录>/translated/<论文名>_zh.md
+输出：<PAPER_ROOT>/<子目录>/translated/<论文名>_zh.md
 """
 import os, sys, subprocess, argparse, time, re, shutil
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent))
+from pipeline_config import CFG
 
-PDF2ZH = "/Users/xbpd/Projects/pdf2zh"
+PDF2ZH = CFG["paths"]["pdf2zh"]
 PYTHON = os.path.join(PDF2ZH, ".venv", "bin", "python")
 SCRIPT = os.path.join(PDF2ZH, "pdf_to_zh_md.py")
-PAPER_ROOT = "/Users/xbpd/Documents/论文"
-SUBDIRS = ["01-智能体", "02-上下文工程", "03-提示词工程", "04-Harness执行框架", "05-循环工程", "06-AI医疗"]
-MODEL = "MiniMax-M3"  # 翻译模型（ox-alpha 不可用，2026-08-25 切回 MiniMax）
-BASE_URL = "https://api.minimaxi.com/v1"
-WORKERS = 4  # 每篇内部翻译并发（降低以省内存，16GB 机器 3 路并行会 OOM）
+PAPER_ROOT = CFG["paths"]["paper_root_legacy"]
+SUBDIRS = list(CFG["directions"])
+MODEL = CFG["translate"]["model"]
+BASE_URL = CFG["translate"]["base_url"]
+WORKERS = int(CFG["translate"]["workers"])  # 每篇内部翻译并发（降低以省内存，16GB 机器 3 路并行会 OOM）
 
 def load_api_key():
     """读取翻译 API key：优先 MiniMax，其次 OpenRouter（从 .env 或环境变量）"""
@@ -143,7 +145,7 @@ def main():
 
     key = load_api_key()
     if not key:
-        sys.exit("未找到 MINIMAX_API_KEY（检查 /Users/xbpd/Projects/pdf2zh/.env）")
+        sys.exit(f"未找到 MINIMAX_API_KEY（检查 {PDF2ZH}/.env 或环境变量）")
 
     parallel = max(1, min(args.parallel, 4))  # 上限 4，避免资源过载
     from concurrent.futures import ThreadPoolExecutor, as_completed

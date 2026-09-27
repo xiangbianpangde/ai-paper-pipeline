@@ -114,8 +114,8 @@ def pdf_first_page(pdf: Path, cache: dict, pages: int = 3) -> str:
     （实测 EACL 版式），只取首页会漏掉作者 → 误判为错配。
 
     ⚠ 缺 pypdf 时必须吼出来：曾因用了未装 pypdf 的解释器，异常被吞掉，
-      全库 237 个夹被静默判成 NO_TEXT（假结论）。请用装了 pypdf 的解释器：
-      /Users/xbpd/.workbuddy/binaries/python/envs/default/bin/python
+      全库 237 个夹被静默判成 NO_TEXT（假结论）。请用装了 pypdf 的解释器
+      （paths.python_hint，见 config.json）运行
     """
     key = f"{pdf}|{pages}"
     if key in cache:
@@ -123,8 +123,9 @@ def pdf_first_page(pdf: Path, cache: dict, pages: int = 3) -> str:
     try:
         from pypdf import PdfReader
     except ImportError as e:  # 环境问题，必须立刻失败而不是产出假结论
+        from pipeline_config import CFG
         raise SystemExit(
-            f"✗ 缺少 pypdf（{e}）—— 请用 /Users/xbpd/.workbuddy/binaries/python/envs/default/bin/python 运行")
+            f"✗ 缺少 pypdf（{e}）—— 请用 {CFG['paths']['python_hint']} 运行")
     try:
         with open(pdf, "rb") as f:
             rd = PdfReader(f)

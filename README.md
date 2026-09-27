@@ -25,11 +25,30 @@
 
 ```
 ai-paper-pipeline/
+├── setup.py            # 初始化向导：交互问答 / --set 非交互写入 config.json
+├── config.json         # 唯一个人环境配置（路径/方向/模型/夸克 fid），脚本一律从此读取
+├── SETUP.md            # 新用户接入指南（AI 助手使用本仓库前的必问清单）
 ├── scripts/            # 全部管线脚本（纯 Python 标准库，无第三方依赖）
-├── automations/        # WorkBuddy 定时任务定义导出（prompt + 调度元数据）
-├── .gitignore
+│   └── pipeline_config.py  # 统一配置加载器（DEFAULTS 兜底 + config.json 覆盖）
+├── automations/
+│   ├── templates/      # 定时任务 prompt 模板（{{占位符}} 源文件）
+│   └── *.md            # 渲染产物（scripts/render_automations.py 生成，勿手改）
 └── README.md
 ```
+
+## 新用户接入（重要）
+
+仓库默认配置指向作者的环境；**新用户使用前必须先完成配置问答**，由 AI 助手
+按 [`SETUP.md`](SETUP.md) 的问询清单收集信息后写入 `config.json`：
+
+```bash
+python3 setup.py                # 交互问答（回车沿用默认值）
+python3 setup.py --check        # 校验
+python3 scripts/render_automations.py   # 渲染个性化定时任务定义
+```
+
+脚本零硬编码个人路径：改环境只动 `config.json`，或用环境变量
+`PIPELINE_CONFIG=<path>` 指向其他配置文件。
 
 ## 论文库组织
 
@@ -45,7 +64,8 @@ ai-paper-pipeline/
 └── 06-AI医疗/            # 医疗大模型、临床 QA、医学 Agent
 ```
 
-> 脚本内的路径常量（论文库根、目录 fid 等）按个人环境写死，复用时改各脚本头部常量即可。
+> 脚本内的路径、方向名、模型、夸克 fid 等个人环境项**全部收敛在 `config.json`**，
+> 复用时跑一遍 `setup.py` 即可，无需改脚本。
 
 ## 核心脚本
 
@@ -99,7 +119,9 @@ bash scripts/translate_daemon.sh           # 后台守护模式
 
 ## 定时任务（WorkBuddy automations）
 
-两个 ACTIVE 任务的定义已导出到 [`automations/`](automations/)，含完整 prompt 原文与调度元数据，可在 WorkBuddy 中一键复现：
+两个 ACTIVE 任务的 **prompt 模板**在 `automations/templates/`（`{{占位符}}`），
+运行 `python3 scripts/render_automations.py` 用 `config.json` 渲染出个性化的
+`automations/*.md`（含完整 prompt 原文与调度元数据，可在 WorkBuddy 中一键复现）：
 
 1. **每日日报一条龙（06:00）** — 检索 → 下载归档 → 导读 → 日报 HTML → 夸克同步 → Server酱微信通知
 2. **每日日报微信送达（06:30）** — 提取当日日报 KPI 与核心论文，经微信 Claw 通道推送摘要版

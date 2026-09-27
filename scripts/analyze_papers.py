@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """深度盘点(限层)：逐篇论文资产配对分析 → 输出 markdown 报告"""
-import os, re, json
+import os, re, json, sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent))
+from pipeline_config import CFG
 
-ROOT = Path("/Users/xbpd/Documents/论文")
-DIRS = ["01-智能体","02-上下文工程","03-提示词工程","04-Harness执行框架","05-循环工程","06-AI医疗"]
+ROOT = Path(CFG["paths"]["paper_root_legacy"])
+DIRS = list(CFG["directions"])
 SKIP = {".DS_Store"}
 
 def analyze(base: Path):
@@ -63,6 +65,8 @@ for d in DIRS:
     out.append("")
 
 text = "\n".join(out)
-Path("/Users/xbpd/WorkBuddy/每日早报/out/paper_analysis.md").write_text(text, encoding="utf-8")
+out_md = Path(CFG["paths"]["workspace"]) / "out" / "paper_analysis.md"
+out_md.parent.mkdir(parents=True, exist_ok=True)
+out_md.write_text(text, encoding="utf-8")
 print(text[:3000])
-print(f"\n\n>>> 完整报告: /Users/xbpd/WorkBuddy/每日早报/out/paper_analysis.md")
+print(f"\n\n>>> 完整报告: {out_md}")

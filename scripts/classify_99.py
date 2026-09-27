@@ -5,9 +5,10 @@
 import sys, json, time, re
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
+from pipeline_config import CFG
 from mineru_client import precision_extract
 
-O = Path("/Users/xbpd/Documents/xbpd_obsidian/02. 🟡 归类 Arrange/论文/99-待分类(非方向)")
+O = Path(CFG["paths"]["paper_root"]) / CFG["special_dirs"]["classify_99"]
 OUT = Path("/tmp/ocr47"); OUT.mkdir(exist_ok=True)
 STATE = Path("/tmp/ocr47_state.json")
 

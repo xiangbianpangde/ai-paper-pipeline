@@ -21,8 +21,10 @@ import os
 import re
 import sys
 from collections import Counter, defaultdict
+sys.path.insert(0, str(__import__("pathlib").Path(__file__).parent))
+from pipeline_config import CFG
 
-DEFAULT_ROOT = "/Users/xbpd/Documents/xbpd_obsidian/02. 🟡 归类 Arrange/论文"
+DEFAULT_ROOT = CFG["paths"]["paper_root"]
 
 # 图片引用抽取（本文件是唯一实现，其他脚本一律 import 这里）
 #

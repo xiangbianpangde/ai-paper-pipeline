@@ -25,8 +25,9 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
+from pipeline_config import CFG
 
-ROOT = Path("/Users/xbpd/Documents/xbpd_obsidian/02. 🟡 归类 Arrange/论文")
+ROOT = Path(CFG["paths"]["paper_root"])
 TRASH = Path.home() / ".Trash"
 BATCH = 10  # 每批最多移动的夹数（安全护栏）
 

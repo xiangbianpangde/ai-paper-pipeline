@@ -25,10 +25,12 @@ import sys
 import time
 from pathlib import Path
 
-ROOT = Path("/Users/xbpd/Documents/xbpd_obsidian/02. 🟡 归类 Arrange/论文")
+sys.path.insert(0, str(Path(__file__).parent))
+from pipeline_config import CFG
+
+ROOT = Path(CFG["paths"]["paper_root"])
 # 兼容旧调用点的方向名清单（供展示用）；实际遍历一律走 paper_folders()
-DIRS = ["01-智能体", "02-上下文工程", "03-提示词工程",
-        "04-Harness执行框架", "05-循环工程", "06-AI医疗"]
+DIRS = list(CFG["directions"])
 WORK = Path("/tmp/v2_work")
 # 「停放区」容器：内含的是 PDF-only 的论文（无译文/解析/导读），默认不参与自动补全
 PARKED = {"其他方向"}

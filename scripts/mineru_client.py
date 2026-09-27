@@ -4,7 +4,7 @@
   本地文件流程: POST /api/v4/file-urls/batch 申请上传链接 → PUT 文件 → 系统自动建任务
               → 轮询 GET /api/v4/extract-results/batch/{batch_id} → 下载 full_zip_url
 - Flash：免 Token（IP 限频, ≤10MB/20页）: POST /api/v1/agent/parse/file → markdown_url
-凭据: /Users/xbpd/WorkBuddy/每日早报/.secrets/mineru.json  {"ak","sk","token"}
+凭据: <secrets_dir>/mineru.json  {"ak","sk","token"}（secrets_dir 见 config.json）
 用法: python3 mineru_client.py precision <pdf路径> -o <输出目录> [--ocr]
       python3 mineru_client.py flash <pdf路径> [-o 输出目录]
 """
@@ -12,9 +12,11 @@ import sys, os, json, time, hmac, hashlib, zipfile, io, http.client as hc
 import urllib.request, urllib.error
 from pathlib import Path
 from urllib.parse import urlsplit
+sys.path.insert(0, str(Path(__file__).parent))
+from pipeline_config import CFG
 
 BASE = "https://mineru.net"
-SECRETS = Path("/Users/xbpd/WorkBuddy/每日早报/.secrets/mineru.json")
+SECRETS = Path(CFG["paths"]["secrets_dir"]) / "mineru.json"
 
 def creds():
     d = {}

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """只读盘点：论文库现状 → 输出每篇论文的资产配对报告(JSON + 摘要)"""
-import json, os, re
+import json, os, re, sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent))
+from pipeline_config import CFG
 
-ROOT = Path("/Users/xbpd/Documents/论文")
-DIRS = ["01-智能体","02-上下文工程","03-提示词工程","04-Harness执行框架","05-循环工程","06-AI医疗"]
+ROOT = Path(CFG["paths"]["paper_root_legacy"])
+DIRS = list(CFG["directions"])
 SKIP_NAMES = {".DS_Store"}
 
 def is_guide(p): return "翻译导读" in p.name

@@ -9,14 +9,15 @@
 import sys, os, re, json, time, shutil, subprocess
 import urllib.request, urllib.error
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent))
+from pipeline_config import CFG
 
-ROOT = Path("/Users/xbpd/Documents/xbpd_obsidian/02. 🟡 归类 Arrange/论文")
-PENDING = ROOT / "00-待OCR转换"
-DIRS = ["01-智能体","02-上下文工程","03-提示词工程","04-Harness执行框架","05-循环工程","06-AI医疗"]
+ROOT = Path(CFG["paths"]["paper_root"])
+PENDING = ROOT / CFG["special_dirs"]["pending_ocr"]
+DIRS = list(CFG["directions"])
 LOG = "/tmp/translate_v2.log"
 STATE = Path("/tmp/translate_v2.state")
-MAX_CHUNK = 5500   # 每块字符数
-sys.path.insert(0, str(Path(__file__).parent))
+MAX_CHUNK = int(CFG["translate"]["max_chunk"])   # 每块字符数
 
 def log(*a):
     msg = f"[{time.strftime('%H:%M:%S')}] " + " ".join(str(x) for x in a)
