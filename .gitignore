@@ -1,0 +1,23 @@
+# 凭据与本地状态 — 永不入库
+.secrets/
+*.key
+*.token
+.env
+
+# 运行产物
+out/
+papers/
+reports/
+*.html
+!docs/*.html
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# 工作台状态
+.workbuddy/
+.cache/
+.quarkclouddrive/
